@@ -66,6 +66,7 @@ function getCurrentDate() {
 async function updateWeatherInfo(city) {
     const weatherData = await getFetchData('weather', city)
 
+    // Cek apakah API merespons dengan status OK (200)
     if (weatherData.cod != 200) {
         showDisplaySection(notFoundSection)
         return
@@ -79,7 +80,7 @@ async function updateWeatherInfo(city) {
     } = weatherData
 
     countryTxt.textContent = country
-    tempTxt.textContent = Math.round(temp) + '°C'
+    tempTxt.textContent = Math.round(temp) + ' °C'
     conditionTxt.textContent = main
     humidityValueTxt.textContent = humidity + '%'
     windValueTxt.textContent = speed + ' M/s'
@@ -95,7 +96,11 @@ async function updateForecastsInfo(city) {
     const foreCastsData = await getFetchData('forecast', city)
 
     const timeTaken = '12:00:00'
-    const todayDate = new Date().toISOString().split('T')[0]
+    // Format tanggal lokal YYYY-MM-DD
+    const today = new Date();
+    const todayDate = today.getFullYear() + '-' + 
+                    String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                    String(today.getDate()).padStart(2, '0');
 
     forecastItemsContainer.innerHTML = ''
     foreCastsData.list.forEach(forecastWeather => {
